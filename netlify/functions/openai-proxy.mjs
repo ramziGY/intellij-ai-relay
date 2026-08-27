@@ -1,11 +1,10 @@
 // Endpoint OpenAI-compatible d'Anthropic
 const ANTHROPIC_CHAT_URL = "https://api.anthropic.com/v1/chat/completions";
 
-// Modèle imposé côté serveur (voir https://platform.claude.com/docs/en/models/overview)
-const MODEL = "claude-sonnet-5";
+const MODEL = "claude-opus-5"; // ou "claude-fable-5"
+const EFFORT = "xhigh";        // "high" (défaut), "xhigh" ou "max"
+const DEFAULT_MAX_TOKENS = 32000;
 
-// Sécurité : max_tokens par défaut si IntelliJ ne l'envoie pas
-const DEFAULT_MAX_TOKENS = 4096;
 
 function json(data, status = 200) {
   return new Response(JSON.stringify(data), {
@@ -89,6 +88,7 @@ export default async function handler(request) {
           ...cleanBody,
           model: MODEL,
           max_tokens: cleanBody.max_tokens ?? DEFAULT_MAX_TOKENS,
+          output_config: { effort: EFFORT },
         }),
       });
     } catch (error) {
